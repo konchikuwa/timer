@@ -1,0 +1,57 @@
+#headline{
+  text-align: center;
+  font-size: 25px;
+  margin-top: 10px;
+  color: #fff;
+}
+#display{
+  text-align: center;
+  margin-top: 60px;
+  font-size: 140px;
+  color: #fff;
+}
+.button{
+  text-align: center;
+  margin-top: 30px;
+}
+#start_button, #reset_button{
+  padding: 20px 60px;
+  font-size: 25px;
+  margin: 0px 50px 0px;
+  cursor: pointer;
+  cursor: hand;
+}
+#start_button[disabled], #reset_button[disabled]{
+  cursor: auto;
+}
+.input{
+  text-align: center;
+  margin-top: 50px;
+  font-size: 20px;
+}
+body.over{
+  background: linear-gradient(-90deg, green, yellow);
+}
+body{
+  background-color: skyblue;
+}
+
+#display.over{
+  color: red;
+}
+.input_button{
+  margin-top: 20px;
+  font-size: 20px;
+  padding: 10px 30px;
+  cursor: pointer;
+  cursor: hand;
+}
+.input_button[disabled]{
+  cursor: auto;
+}
+#switchmode_button{
+  float: right;
+  margin-right: 80px;
+  width: 140px;
+  height: 30px;
+}
