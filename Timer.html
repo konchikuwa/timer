@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>タイマー</title>
+  <link rel="stylesheet" href="Timer.css">
+  <script src="file:///C:/Users/takah/jQuery/jquery-3.5.0.min.js"></script>
+</head>
+<body>
+  <p id="headline">タイマー</p>
+
+  <div id="display">
+    <span id="hours">00:</span>
+    <span id="minutes">00:</span>
+    <span id="seconds">00</span>
+  </div>
+  <div class="button">
+    <button id="start_button">スタート</button>
+    <button id="reset_button">リセット</button>
+  </div>
+  <div class="input">
+    <input type="number" name="input_hours" class="input_number" id="input_hours" value="0" min="0" max="99">
+    <span>時間</span>
+    <input type="number" name="input_minutes" class="input_number" id="input_minutes" value="0" max="59" min="0">
+    <span>分</span>
+    <input type="number" name="input_seconds" class="input_number" id="input_seconds" value="0" max="59" min="0">
+    <span>秒</span>
+    <div>
+      <button type="submit" onclick="allUpdate()" class="input_button" id="input_button">決定</button>
+    </div>
+  </div>
+  <button type="submit" id="switchmode_button" onclick="switchMode()">ストップウォッチへ</button>
+  <audio src="Timer_alert.mp3" loop preload="auto" class="sound"></audio>
+  <script src="Timer.js"></script>
+</body>
+</html>
