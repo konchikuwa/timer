@@ -13,9 +13,9 @@ var TimeKeep={
   },
   getnowTime : ()=>{
     let DD = new Date();
-    TimeKeep.nowseconds = DD.getSeconds();
-    TimeKeep.nowminutes = DD.getMinutes();
-    TimeKeep.nowhours = DD.getHours();
+      TimeKeep.nowseconds = DD.getSeconds();
+      TimeKeep.nowminutes = DD.getMinutes();
+      TimeKeep.nowhours = DD.getHours();
 
     if(leave.seconds-TimeKeep.nowseconds+TimeKeep.startseconds>59){
       TimeDisplay.seconds = getDoubleNumber(leave.seconds-TimeKeep.nowseconds+TimeKeep.startseconds-60);
@@ -41,7 +41,6 @@ var TimeKeep={
     hours.innerHTML=TimeDisplay.hours + ":";
     minutes.innerHTML=TimeDisplay.minutes + ":";
     seconds.innerHTML=TimeDisplay.seconds;
-
     if(TimeDisplay.hours ==="00" && TimeDisplay.minutes ==="00" && TimeDisplay.seconds ==="00"){
 
       TimerStop();
@@ -51,7 +50,6 @@ var TimeKeep={
       $('.sound').get(0).play();
     }
   }
-
 };
 
 var continuegetnowTime = 0;
@@ -69,7 +67,7 @@ var TimerStart = () =>{
   $('#input_minutes').prop("disabled", true);
   $('#input_seconds').prop("disabled", true);
   $('#input_button').prop("disabled", true);
-  continuegetnowTime = setInterval("TimeKeep.getnowTime()",1);
+  continuegetnowTime = setInterval("TimeKeep.getnowTime()",1000);
 }
 var TimerStop = () =>{
   $('#start_button').html("スタート");
@@ -148,27 +146,37 @@ $('#input_seconds').click(()=>{
 
 var allUpdate = () =>{
   $('#input_hours').trigger("click");
-  if(document.getElementById("input_hours").value>=0 && document.getElementById("input_hours").value<100)
-    $('#input_minutes').trigger("click");
-  if(document.getElementById("input_minutes").value>=0 && document.getElementById("input_minutes").value<60)
-    $('#input_seconds').trigger("click");
+  $('#input_minutes').trigger("click");
+  $('#input_seconds').trigger("click");
+  if(document.getElementById("switchmode_button").innerHTML ==="タイマーへ"){
+    $("#start_button").prop("disabled", false);
+    $("#reset_button").prop("disabled", false);
+  }
 }
 
 document.getElementById("start_button").onclick = function(){
-  if($('#input_hours').prop("disabled") === true){
-    TimerStop();
-    $('#input_hours').prop("disabled", false);
-    $('#input_minutes').prop("disabled", false);
-    $('#input_seconds').prop("disabled", false);
-    $('#input_button').prop("disabled", false);
-    if(TimeDisplay.hours ==="00" && TimeDisplay.minutes ==="00" && TimeDisplay.seconds ==="00"){
-      allUpdate();
-      $('body').removeAttr("class","over");
-      $('#display').removeAttr("class", "over");
-      $('.sound').get(0).pause();
+  if(document.getElementById("switchmode_button").innerHTML === "ストップウォッチへ"){
+    if($('#input_hours').prop("disabled") === true){
+      TimerStop();
+      $('#input_hours').prop("disabled", false);
+      $('#input_minutes').prop("disabled", false);
+      $('#input_seconds').prop("disabled", false);
+      $('#input_button').prop("disabled", false);
+      if(TimeDisplay.hours ==="00" && TimeDisplay.minutes ==="00" && TimeDisplay.seconds ==="00"){
+        allUpdate();
+        $('body').removeAttr("class","over");
+        $('#display').removeAttr("class", "over");
+        $('.sound').get(0).pause();
+      }
+    }else{
+      TimerStart();
     }
   }else{
-    TimerStart();
+    if($('#start_button').html() === "スタート"){
+      StopwatchStart();
+    }else{
+      TimerStop();
+    }
   }
 }
 document.getElementById("reset_button").onclick = function(){
@@ -182,20 +190,68 @@ document.getElementById("reset_button").onclick = function(){
   $('body').removeAttr("class","over");
   $('#display').removeAttr("class", "over");
   $('.sound').get(0).pause();
+  leave = {
+    hours: 0,
+    minutes: 0,
+    seconds: 0
+  }
 }
 $("#start_button").prop("disabled", true);
 $("#reset_button").prop("disabled", true);
 $('.input_number').val("0");
 
+var StopwatchStart = () => {
+  $('#start_button').html("ストップ");
+  TimeKeep.getstartTime();
+  continuegetnowTime = setInterval("StopwatchgetnowTime()",500);
+}
+var StopwatchgetnowTime = () =>{
+  let DD = new Date();
+      TimeKeep.nowseconds = DD.getSeconds();
+      TimeKeep.nowminutes = DD.getMinutes();
+      TimeKeep.nowhours = DD.getHours();
+
+    if(leave.seconds+TimeKeep.nowseconds-TimeKeep.startseconds>59){
+      TimeDisplay.seconds = getDoubleNumber(leave.seconds+TimeKeep.nowseconds-TimeKeep.startseconds-60);
+      TimeKeep.nowminutes++;
+    }else if(leave.seconds+TimeKeep.nowseconds-TimeKeep.startseconds<0){
+      TimeDisplay.seconds = getDoubleNumber(leave.seconds+TimeKeep.nowseconds-TimeKeep.startseconds+60);
+      TimeKeep.nowminutes--;
+    }else{
+      TimeDisplay.seconds = getDoubleNumber(leave.seconds+TimeKeep.nowseconds-TimeKeep.startseconds);
+    }
+
+    if(leave.minutes+TimeKeep.nowminutes-TimeKeep.startminutes>59){
+      TimeDisplay.minutes = getDoubleNumber(leaveminutess+TimeKeep.nowminutes-TimeKeep.startminutes-60);
+      TimeKeep.nowhours++;
+    }else if(leave.minutes+TimeKeep.nowminutes-TimeKeep.startminutes<0){
+      TimeDisplay.minutes = getDoubleNumber(leave.minutes+TimeKeep.nowminutes-TimeKeep.startminutes+60);
+      TimeKeep.nowhours--;
+    }else{
+      TimeDisplay.minutes = getDoubleNumber(leave.minutes+TimeKeep.nowminutes-TimeKeep.startminutes);
+    }
+
+    TimeDisplay.hours = getDoubleNumber(leave.hours+TimeKeep.nowhours-TimeKeep.starthours);
+    hours.innerHTML=TimeDisplay.hours + ":";
+    minutes.innerHTML=TimeDisplay.minutes + ":";
+    seconds.innerHTML=TimeDisplay.seconds;
+}
+var StopwatchStop = () => {
+
+}
 var switchMode = () => {
+  $('#reset_button').trigger("click");
   if(document.getElementById("switchmode_button").innerHTML === "ストップウォッチへ"){
     document.getElementById("switchmode_button").innerHTML = "タイマーへ";
     $('.input').hide();
     $('#headline').html("ストップウォッチ");
-    
+    $("#start_button").prop("disabled", false);
+    $("#reset_button").prop("disabled", false);
   }else{
     document.getElementById("switchmode_button").innerHTML = "ストップウォッチへ"
     $('.input').show();
     $('#headline').html("タイマー");
+    $("#start_button").prop("disabled", true);
+    $("#reset_button").prop("disabled", true);
   }
 }
